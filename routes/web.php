@@ -86,3 +86,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 //CLINICIAN ROUTES
 Route::get('/clinician/add', ['uses' => 'UserController@adduserform', 'as' => 'addClinician']);
 Route::post('/clinician/submit', ['uses' => 'UserController@adduser', 'as' => 'addClinicianData']);
+Route::get('/viewClinicians', ['uses' => 'UserController@viewclinicians']);

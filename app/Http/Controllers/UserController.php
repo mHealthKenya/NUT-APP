@@ -28,6 +28,9 @@ class UserController extends Controller
                 $str = substr($pno, 1);
 
                 $fullno = "+254" . $str;
+                $permitted_chars = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+
+                $pwd = substr(str_shuffle($permitted_chars), 0, 6);
 
                 $user = new User;
                 $user->first_name = $request->input('first_name');
@@ -35,11 +38,24 @@ class UserController extends Controller
                 $user->id_number = $request->input('id_number');
                 $user->phone_number = $fullno;
                 $user->facility_id = $request->input('facility_id');
-                $user->password = bcrypt($request->input('password'));
+                $user->password = bcrypt($pwd);
                 $user->email = $request->input('email');
                 $user->created_at = $date;
                 $user->updated_at = $date;
-                $user->save();
+               if  ($user->save()){
+
+                
+              $msg = "Hello " . $request->input('first_name') . ", you have been registered successfully on Nut APP System as a Clinician :). " .
+            "You can access the system at afyapoa.mhealthkenya.co.ke with Username:" . $request->input('email') . " and Password:" . $pwd;
+
+               $to =  $fullno;
+               $sender = new SenderController;
+               $sender->send($to, $msg);
+
+
+               };
+               echo ("Clinician added successfuly");
+              // return redirect()->route('viewAgents');
 
                 return response(['status' => 'success', 'details' => $user]);
 

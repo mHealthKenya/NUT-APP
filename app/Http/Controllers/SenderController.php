@@ -10,7 +10,7 @@ use App\EducationalMsg;
 use App\OutgoingMsg;
 use Redirect;
 
-class VoiceLogController extends Controller
+class SenderController extends Controller
 {
     //
    
