@@ -11,9 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard.dashboardv2');
-});
+Route::get('/', ['middleware' => 'guest', function()
+{
+    return view('sessions.signIn');
+}]);
+Auth::routes();
+
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/home', ['uses' => 'HomeController@index', 'as' => 'home']);
+    Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
+
 // Route::view('/', 'starter')->name('starter');
 Route::view('dashboard/dashboard1', 'dashboard.dashboardv1')->name('dashboard_version_1');
 Route::view('dashboard/dashboard2', 'dashboard.dashboardv2')->name('dashboard_version_2');
@@ -80,10 +88,10 @@ Route::post('call/{to}', ['uses' => 'VoiceLogController@sendVoice']);
 
 // , 'as' => 'completereg']);
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
 //CLINICIAN ROUTES
 Route::get('/clinician/add', ['uses' => 'UserController@adduserform', 'as' => 'addClinician']);
+Route::get('/caregiver', ['uses' => 'ClientController@addclientform', 'as' => 'viewCareGiver']);
 Route::post('/clinician/submit', ['uses' => 'UserController@adduser', 'as' => 'addClinicianData']);
-Route::get('/viewClinicians', ['uses' => 'UserController@viewclinicians']);
+Route::get('/clinician/view', ['uses' => 'UserController@viewclinician', 'as' => 'viewClinician']);
+Route::post('/clinician/edit', ['uses' => 'UserController@editclinician', 'as' => 'editClinicianData']);
+});

@@ -21,9 +21,9 @@
                         <div class="col-lg-4 col-md-6 col-sm-6">
                             <div class="card card-icon mb-4">
                                 <div class="card-body text-center">
-                                    <i class="i-Data-Upload"></i>
-                                    <p class="text-muted mt-2 mb-2">Today's Upload</p>
-                                    <p class="text-primary text-24 line-height-1 m-0">21</p>
+                                    <i class="i-Add-User"></i>
+                                    <p class="text-muted mt-2 mb-2">Number of Clinicians</p>
+                                    <p class="text-primary text-24 line-height-1 m-0">{{$users_count}}</p>
                                 </div>
                             </div>
                         </div>
@@ -32,8 +32,8 @@
                             <div class="card card-icon mb-4">
                                 <div class="card-body text-center">
                                     <i class="i-Add-User"></i>
-                                    <p class="text-muted mt-2 mb-2">New Users</p>
-                                    <p class="text-primary text-24 line-height-1 m-0">21</p>
+                                    <p class="text-muted mt-2 mb-2">Number of Care Givers</p>
+                                <p class="text-primary text-24 line-height-1 m-0">{{$clients_count}}</p>
                                 </div>
                             </div>
                         </div>
@@ -42,8 +42,8 @@
                             <div class="card card-icon mb-4">
                                 <div class="card-body text-center">
                                     <i class="i-Money-2"></i>
-                                    <p class="text-muted mt-2 mb-2">Total sales</p>
-                                    <p class="text-primary text-24 line-height-1 m-0">4021</p>
+                                    <p class="text-muted mt-2 mb-2">Messages Sent</p>
+                                    <p class="text-primary text-24 line-height-1 m-0">{{$messages_count}}</p>
                                 </div>
                             </div>
                         </div>

@@ -3,6 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Auth;
+use App\Client;
+use App\User;
+use App\OutgoingMsg;
 
 class HomeController extends Controller
 {
@@ -27,10 +32,13 @@ class HomeController extends Controller
         $data = array(
             
             'clients_count' => Client::count(),
+            'users_count' => User::count(),
+            'messages_count' => OutgoingMsg::count(),
+
             
         );
         return view('dashboard.dashboardv2')->with($data);
-        echo json_encode($data);
+        //echo json_encode($data);
 
     }
 }

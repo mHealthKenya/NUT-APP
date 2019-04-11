@@ -34,5 +34,8 @@ class User extends Authenticatable
 
     public function clientAccount() {
 		return $this->hasOne(Client::class, 'user_id');
-	}
+    }
+    public function facility(){
+        return $this->belongsTo('App\Facility', 'facility_id', 'id');
+    }
 }

@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,4 +22,7 @@ Route::post('call', ['uses' => 'VoiceLogController@sendVoice']);
 Route::post('caller_one', ['uses' => 'VoiceLogController@getDigits']);
 Route::post('digits', ['uses' => 'VoiceLogController@saveDigits']);
 Route::post('message', ['uses' => 'VoiceLogController@send']);
-Route::post('caregiver', ['uses' => 'VoiceLogController@add_care_giver']);
+Route::post('addcaregiver', ['uses' => 'VoiceLogController@add_care_giver']);
+Route::post('updatecaregiver', ['uses' => 'VoiceLogController@update_care_giver']);
+Route::post('getcaregivers', ['uses' => 'VoiceLogController@get_care_givers']);
+Route::post('login', ['uses' => 'VoiceLogController@login']);

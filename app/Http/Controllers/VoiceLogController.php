@@ -9,6 +9,8 @@ use App\Client;
 use App\EducationalMsg;
 use App\OutgoingMsg;
 use Redirect;
+use App\User;
+use Illuminate\Support\Facades\Auth;
 
 class VoiceLogController extends Controller
 {
@@ -93,6 +95,56 @@ class VoiceLogController extends Controller
     public function saveDigits(){
         // Save to DB ...
     }
+    public function update_care_giver(Request $request){
+            $client_id=$request->input('id');
+            $phone_number =$request->input('phone_number');
+            $date_recruitment=$request->input('date_recruitment');
+			//if message_type is 1 = sms,2=voice
+            $message_type=$request->input('message_type');
+            
+
+            
+            $client = Client::find($client_id);
+            $client->phone_number =  $phone_number;
+            $client->date_recruitment = $date_recruitment;
+            $client->message_type = $message_type;
+            $client->updated_at =  date("Y-m-d H:i:s");
+            if($client->save()){
+                return response()->json($client);
+            }
+            return response()->json(['messages' => ['Error in saving']], 404);
+ 
+        // Save to DB ...
+    }
+
+    public function login(Request $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if(!empty($user)){
+            if (Auth::attempt(array('email' => $request->email, 'password' => $request->password))) {
+
+                return response()->json($user);
+                
+            } else {
+                return response(["messages" => ["Invalid login credentials", "Wrong email and password combination"]], 403);
+            }
+        }else{
+            return response(["messages" => ["Email does not exist in the system"]], 404);
+        }
+    }
+
+    public function get_care_givers(Request $request){
+
+        $user_id =$request->input('user_id');
+  
+        
+        $clients = Client::where('user_id', $user_id)->get();
+
+            return response()->json($clients);
+        
+
+    // Save to DB ...
+}
 
     
 	public function add_care_giver(Request $request){

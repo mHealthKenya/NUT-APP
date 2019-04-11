@@ -57,11 +57,18 @@
                                         </div>
                                     </div>
                                     <div class="form-group col-md-6">
-                                            <label for="inputEmail3" class="col-sm-2 col-form-label">Facility</label>
+                                        <label for="facility1" class="col-sm-2 col-form-label">Facility</label>
                                             <div class="col-sm-10">
-                                                <input type="facility" name="facility_id" id="facility"  required class="form-control" id="inputfacilityId3" placeholder="Enter Facility">
+                                            <select class="form-control" required data-width="100%" id="facility" name="facility_id">
+                                                    <option value="">Select Facility</option>
+                                                        @if (count($facilities) > 0)
+                                                            @foreach($facilities as $facility)
+                                                            <option value="{{$facility->facility_id }}">{{ ucwords($facility->name) }}</option>
+                                                                @endforeach
+                                                        @endif
+                                            </select>
                                             </div>
-                                        </div>
+                                </div>
                                 </div>
                            <div class="row">
                            <br>
