@@ -166,7 +166,7 @@ class VoiceLogController extends Controller
 					$client->phone_number =  (int)$phone_number;
                     $client->date_recruitment = date("Y-m-d H:i:s");
                     $client->id_number = (int)$id_number;
-					$client->user_id  = (int)$user_id;
+					$client->user_id  =3;
                     $client->message_type = (int)$message_type;
                     $client->updated_at =  date("Y-m-d H:i:s");
 					$client->created_at =  date("Y-m-d H:i:s");
