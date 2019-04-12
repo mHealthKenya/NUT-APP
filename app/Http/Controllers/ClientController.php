@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Client;
 use App\Facility;
-
+use File;
 class ClientController extends Controller
 {
     //
@@ -24,5 +24,11 @@ class ClientController extends Controller
         );
 
         return view('caregiver.viewcaregiver')->with($data);
+    }
+    public function show_images(){
+        
+       echo $path = public_path();
+        
+     return File::get($path.'\images\test.png');
     }
 }

@@ -26,3 +26,4 @@ Route::post('addcaregiver', ['uses' => 'VoiceLogController@add_care_giver']);
 Route::post('updatecaregiver', ['uses' => 'VoiceLogController@update_care_giver']);
 Route::post('getcaregivers', ['uses' => 'VoiceLogController@get_care_givers']);
 Route::post('login', ['uses' => 'VoiceLogController@login']);
+Route::get('sendvoice', ['uses' => 'VoiceLogController@sendVoice']);

@@ -56,7 +56,7 @@ class VoiceLogController extends Controller
         $from     = "+254711082608";
 
         //set number you want to call, comma separated list if more than one
-        $to = "+254705255873";
+        $to = "+254728790010";
 
         try {
         //    Make the call
@@ -95,10 +95,11 @@ class VoiceLogController extends Controller
     public function saveDigits(){
         // Save to DB ...
     }
+
     public function update_care_giver(Request $request){
             $client_id=$request->input('id');
             $phone_number =$request->input('phone_number');
-            $date_recruitment=$request->input('date_recruitment');
+            $date_recruitment=$request->date("Y-m-d H:i:s");
             $id_number=$request->input('id_number');
 			//if message_type is 1 = sms,2=voice
             $message_type=$request->input('message_type');
@@ -106,10 +107,10 @@ class VoiceLogController extends Controller
 
             
             $client = Client::find($client_id);
-            $client->phone_number =  $phone_number;
+            $client->phone_number =  (int)$phone_number;
             $client->date_recruitment = $date_recruitment;
-            $client->message_type = $message_type;
-            $client->id_number = $id_number;
+            $client->message_type = (int)$message_type;
+            $client->id_number =(int)$id_number;
             $client->updated_at =  date("Y-m-d H:i:s");
             if($client->save()){
                 return response()->json($client);
@@ -162,11 +163,11 @@ class VoiceLogController extends Controller
             	//step 2 save new client_details
 						
 					$client = new Client;
-					$client->phone_number =  $phone_number;
-                    $client->date_recruitment = $date_recruitment;
-                    $client->id_number = $id_number;
-					$client->user_id  = $user_id;
-                    $client->message_type = $message_type;
+					$client->phone_number =  (int)$phone_number;
+                    $client->date_recruitment = date("Y-m-d H:i:s");
+                    $client->id_number = (int)$id_number;
+					$client->user_id  = (int)$user_id;
+                    $client->message_type = (int)$message_type;
                     $client->updated_at =  date("Y-m-d H:i:s");
 					$client->created_at =  date("Y-m-d H:i:s");
 				
