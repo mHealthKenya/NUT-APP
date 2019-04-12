@@ -23,17 +23,11 @@
                         </a>
                         <div class="triangle"></div>
                     </li>
-                    <li class="nav-item {{ request()->is('datatables/*') ? 'active' : '' }}">
-                        <a class="nav-item-hold" href="{{route('basic-tables')}}">
-                            <i class="nav-icon i-File-Horizontal-Text"></i>
-                            <span class="nav-text">Datatables</span>
-                        </a>
-                        <div class="triangle"></div>
-                    </li>
-                    <li class="nav-item {{ request()->is('sessions/*') ? 'active' : '' }}" data-item="sessions">
+                   
+                    <li class="nav-item {{ request()->is('sessions/*') ? 'active' : '' }}" data-item="messages">
                         <a class="nav-item-hold" href="/test.html">
-                            <i class="nav-icon i-Administrator"></i>
-                            <span class="nav-text">Sessions</span>
+                            <i class="nav-icon i-Bar-Chart"></i>
+                            <span class="nav-text">Messages</span>
                         </a>
                         <div class="triangle"></div>
                     </li>
@@ -63,18 +57,16 @@
                             <span class="item-name">View Care Giver</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="{{ Route::currentRouteName()=='user-profile' ? 'open' : '' }}" href="{{route('user-profile')}}">
-                            <i class="nav-icon i-Male"></i>
-                            <span class="item-name">User Profile</span>
+                    
+                </ul>
+                <ul class="childNav" data-parent="messages">
+                    <li class="nav-item ">
+                        <a class="{{ Route::currentRouteName()=='viewMessages' ? 'open' : '' }}" href="{{route('viewMessages')}}">
+                            <i class="nav-icon i-Add-User"></i>
+                            <span class="item-name">View Messages</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="{{ Route::currentRouteName()=='starter' ? 'open' : '' }}" href="{{route('starter')}}" class="open">
-                            <i class="nav-icon i-File-Horizontal"></i>
-                            <span class="item-name">Blank Page</span>
-                        </a>
-                    </li>
+                    
                 </ul>
             </div>
             <div class="sidebar-overlay"></div>

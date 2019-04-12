@@ -66,8 +66,7 @@ class UserController extends Controller
                if  ($user->save()){
 
                 
-              $msg = "Hello " . $request->input('first_name') . ", you have been registered successfully on the Nutrition Application System as a Clinician. " .
-            "You can access the system at afyapoa.mhealthkenya.co.ke with Username:" . $request->input('email') . " and Password:" . $pwd;
+              $msg = "Hello " . $request->input('first_name') . ", you have been registered successfully on the Nutrition Application System as a Clinician. ". $request->input('email') . " and Password:" . $pwd;
 
                $to =  $fullno;
                $sender = new SenderController;

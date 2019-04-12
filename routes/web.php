@@ -95,4 +95,7 @@ Route::post('/clinician/submit', ['uses' => 'UserController@adduser', 'as' => 'a
 Route::get('/clinician/view', ['uses' => 'UserController@viewclinician', 'as' => 'viewClinician']);
 Route::post('/clinician/edit', ['uses' => 'UserController@editclinician', 'as' => 'editClinicianData']);
 Route::get('/image', ['uses' => 'ClientController@show_images']);
+
+//MESSAGES
+Route::get('/messages', ['uses' => 'OutgoingController@addmessagesform', 'as' => 'viewMessages']);
 });

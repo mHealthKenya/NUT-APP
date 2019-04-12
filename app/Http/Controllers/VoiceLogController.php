@@ -218,7 +218,7 @@ class VoiceLogController extends Controller
                             $subsquent_message->updated_at =  date("Y-m-d H:i:s");
                             $subsquent_message->created_at =  date("Y-m-d H:i:s");
                             if($subsquent_message->save()){
-                                return response()->json($subsquent_message);
+                               //echo response()->json($subsquent_message);
 
                                 //echo "success";
                              }
