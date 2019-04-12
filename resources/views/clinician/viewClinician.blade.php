@@ -24,11 +24,11 @@
                                                      <tr>
                                                 <th>No.</th>
                                                 <th>Name</th>
-                                                <th>ID No.</th>
                                                 <th>Phone</th>
                                                 <th>Facility</th>
                                                 <th>Email</th>
                                                 <th>Created At</th>
+                                                <th>Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -37,11 +37,11 @@
                                                     <td>{{ $loop->iteration }}</td>
 
                                                     <td>{{ucwords($clinician_->first_name)}} {{ucwords($clinician_->last_name)}}</td>
-                                                    <td>{{$clinician_->phone_no}}</td>
+                                                    <td>{{$clinician_->phone_number}}</td>
                                                     <td>@if(!empty($clinician_->facility_id)){{$clinician_->facility->name}}@endif</td>
                                                     {{-- <td>{{$clinician_->facility_id['name']}}</td> --}}
                                                     <td>{{$clinician_->email}}</td>
-                                                    <td>@if(!empty($clinician_->facility_id)){{$clinician_->facility->name}}@endif</td>
+                                                    {{-- <td>@if(!empty($clinician_->facility_id)){{$clinician_->facility->name}}@endif</td> --}}
                                                     <td>{{$clinician_->created_at}}</td>
                                                     <td><a onclick="editClinician({{$clinician_}});" class="btn btn-info btn-xs" style="color: white; margin-right:3px;">Edit</a>
                                                         <a onclick ="deleteClinician({{$clinician_->user_id}});" class="btn btn-xs btn-danger" style="color: white; margin-right:3px;">Delete</a>
@@ -112,7 +112,7 @@
                                                     <option value="">Select Facility</option>
                                                         @if (count($facilities) > 0)
                                                             @foreach($facilities as $facility)
-                                                            <option value="{{$facility->facility_id }}">{{ ucwords($facility->name) }}</option>
+                                                            <option value="{{$facility->id }}">{{ ucwords($facility->name) }}</option>
                                                                 @endforeach
                                                         @endif
                                             </select>
@@ -179,8 +179,9 @@
                                     document.getElementById("first_name").value = clinician_["first_name"];
                                     document.getElementById("last_name").value = clinician_["last_name"];
                                     document.getElementById("id_no").value = clinician_["id_number"];
-                                    document.getElementById("phone_no").value = clinician_["phone_no"];                                 
-                                    $("#facility").val(clinician_["facility_id"]).change();                                    
+                                    document.getElementById("phone_no").value = clinician_["phone_number"];
+                                    document.getElementById("email").value = clinician_["email"];                                  
+                                    $("#facility").val(clinician_["id"]).change();                                    
                                    
                                    
 

@@ -63,7 +63,7 @@
                                                     <option value="">Select Facility</option>
                                                         @if (count($facilities) > 0)
                                                             @foreach($facilities as $facility)
-                                                            <option value="{{$facility->facility_id }}">{{ ucwords($facility->name) }}</option>
+                                                            <option value="{{$facility->id }}">{{ ucwords($facility->name) }}</option>
                                                                 @endforeach
                                                         @endif
                                             </select>

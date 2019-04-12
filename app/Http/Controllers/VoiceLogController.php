@@ -99,6 +99,7 @@ class VoiceLogController extends Controller
             $client_id=$request->input('id');
             $phone_number =$request->input('phone_number');
             $date_recruitment=$request->input('date_recruitment');
+            $id_number=$request->input('id_number');
 			//if message_type is 1 = sms,2=voice
             $message_type=$request->input('message_type');
             
@@ -108,6 +109,7 @@ class VoiceLogController extends Controller
             $client->phone_number =  $phone_number;
             $client->date_recruitment = $date_recruitment;
             $client->message_type = $message_type;
+            $client->id_number = $id_number;
             $client->updated_at =  date("Y-m-d H:i:s");
             if($client->save()){
                 return response()->json($client);
@@ -161,7 +163,8 @@ class VoiceLogController extends Controller
 						
 					$client = new Client;
 					$client->phone_number =  $phone_number;
-					$client->date_recruitment = $date_recruitment;
+                    $client->date_recruitment = $date_recruitment;
+                    $client->id_number = $id_number;
 					$client->user_id  = $user_id;
                     $client->message_type = $message_type;
                     $client->updated_at =  date("Y-m-d H:i:s");

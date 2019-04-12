@@ -76,9 +76,9 @@ class UserController extends Controller
 
                };
                echo ("Clinician added successfuly");
-              // return redirect()->route('viewAgents');
+                 return redirect()->route('viewClinician');
 
-                return response(['status' => 'success', 'details' => $user]);
+               // return response(['status' => 'success', 'details' => $user]);
 
 
             }
@@ -116,6 +116,13 @@ class UserController extends Controller
 
             date_default_timezone_set('UTC');
             $date = date('Y-m-d H:i:s', time());
+            $pno = $request->input('phone_number');
+            $str = substr($pno, 1);
+
+            $fullno = "+254" . $str;
+            $permitted_chars = '0123456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+
+            $pwd = substr(str_shuffle($permitted_chars), 0, 6);
 
             $user = User::find($request->input('user_id'));
             $user = new User;
