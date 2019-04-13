@@ -98,4 +98,5 @@ Route::get('/image', ['uses' => 'ClientController@show_images']);
 
 //MESSAGES
 Route::get('/messages', ['uses' => 'OutgoingController@addmessagesform', 'as' => 'viewMessages']);
+
 });
