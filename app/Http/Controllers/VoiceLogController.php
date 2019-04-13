@@ -99,9 +99,18 @@ class VoiceLogController extends Controller
         $audio = 'helo.mp3';
         
         $fileUrl2 = File::get($path.'/assets/'.$audio);
-        $response = "<?xml version\"1.0\" ?><Response><Play url=\"$fileUrl2\" /></Response>";
+      
         
-        return $response;
+        // return $response;
+
+        $response  = '<?xml version="1.0" encoding="UTF-8"?>';
+        $response .= '<Response>';
+        $response .= '<Say>Please listen to our awesome record</Say>';
+        $response .= '<Play url= $fileUrl2/>';
+        $response .= '</Response>';
+        // Print the response onto the page so that our gateway can read it
+        header('Content-type: apllication/xml');
+        echo $response;
     }
     public function saveDigits(){
         // Save to DB ...
