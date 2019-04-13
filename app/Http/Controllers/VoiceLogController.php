@@ -98,7 +98,7 @@ class VoiceLogController extends Controller
         $path = public_path();
         $audio = helo.mp3;
         
-        $fileUrl2 = File::get($path.'/assets/'.$audio));
+        $fileUrl2 = File::get($path.'/assets/'.$audio);
         $response = "<?xml version\"1.0\" ?><Response><Play url=\"$fileUrl2\" /><GetDigits timeout=\"15\" callbackUrl=\"$saveDigitsCallback\"><Play url=\"$fileUrl\" /></GetDigits></Response>";
         return $response;
     }
