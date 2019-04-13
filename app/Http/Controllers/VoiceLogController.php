@@ -96,7 +96,7 @@ class VoiceLogController extends Controller
        // $fileUrl2 = "http://www.amazon.co.us/myfile.mp3";
         //$saveDigitsCallback = "http://193.165.32.14:8080/api/digits";
         $path = public_path();
-        $audio = helo.mp3;
+        $audio = 'helo.mp3';
         
         $fileUrl2 = File::get($path.'/assets/'.$audio);
         $response = "<?xml version\"1.0\" ?><Response><Play url=\"$fileUrl2\" /><GetDigits timeout=\"15\" callbackUrl=\"$saveDigitsCallback\"><Play url=\"$fileUrl\" /></GetDigits></Response>";
