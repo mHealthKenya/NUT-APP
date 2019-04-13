@@ -56,7 +56,7 @@ class VoiceLogController extends Controller
         $from     = "+254711082608";
 
         //set number you want to call, comma separated list if more than one
-        $to = "+254713887561";
+        $to = "+254705255873";
 
         try {
         //    Make the call
