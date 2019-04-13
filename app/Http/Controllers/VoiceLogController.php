@@ -56,7 +56,7 @@ class VoiceLogController extends Controller
         $from     = "+254711082608";
 
         //set number you want to call, comma separated list if more than one
-        $to = "+254705255873";
+        $to = "+254713887561";
 
         try {
         //    Make the call
@@ -85,12 +85,12 @@ class VoiceLogController extends Controller
         }
 
     }
-    public test_voice(){
-         $path = public_path();
-        $audio = helo.mp3;
+    // public test_voice(){
+    //      $path = public_path();
+    //     $audio = helo.mp3;
         
-       $uphoto = File::get($path.'/assets/'.$audio));
-    }
+    //    $uphoto = File::get($path.'/assets/'.$audio));
+    // }
     public function voice_receiver(){
         $fileUrl = "http://www.amazon.co.us/mypromptfile.mp3";
        // $fileUrl2 = "http://www.amazon.co.us/myfile.mp3";
