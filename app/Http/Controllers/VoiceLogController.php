@@ -133,13 +133,13 @@ class VoiceLogController extends Controller
             $client->id_number =(int)$id_number;
             $client->updated_at =  date("Y-m-d H:i:s");
             if($client->save()){
-                $data = array(
+                // $data = array(
                 
-                    // 'counties' => $counties,
-                     //'subcounties' => $subcounties,
-                     'result' => $client,
-                );
-                return response()->json($data);
+                //     // 'counties' => $counties,
+                //      //'subcounties' => $subcounties,
+                //      'result' => $client,
+                // );
+                return response("Updated succesfuly");
             }
 
             return response("Error in saving");
@@ -153,12 +153,13 @@ class VoiceLogController extends Controller
         $user = User::where('email', $request->email)->first();
         if(!empty($user)){
             if (Auth::attempt(array('email' => $request->email, 'password' => $request->password))) {
-               
+               $user_array =array($user);
+              
                 $data = array(
                 
                    // 'counties' => $counties,
                     //'subcounties' => $subcounties,
-                    'result' => $user,
+                    'result' => $user_array,
         
                 );
                 return response()->json($data);
@@ -178,7 +179,7 @@ class VoiceLogController extends Controller
   
         
         $clients = Client::where('user_id', $user_id)->get();
-
+          
         $data = array(
                 
             // 'counties' => $counties,
