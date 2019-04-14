@@ -119,7 +119,7 @@ class VoiceLogController extends Controller
     public function update_care_giver(Request $request){
             $client_id=$request->input('id');
             $phone_number =$request->input('phone_number');
-            $date_recruitment=$request->date("Y-m-d H:i:s");
+            //$date_recruitment=$request->date("Y-m-d H:i:s");
             $id_number=$request->input('id_number');
 			//if message_type is 1 = sms,2=voice
             $message_type=$request->input('message_type');
@@ -128,14 +128,22 @@ class VoiceLogController extends Controller
             
             $client = Client::find($client_id);
             $client->phone_number =  (int)$phone_number;
-            $client->date_recruitment = $date_recruitment;
+          //  $client->date_recruitment = $date_recruitment;
             $client->message_type = (int)$message_type;
             $client->id_number =(int)$id_number;
             $client->updated_at =  date("Y-m-d H:i:s");
             if($client->save()){
-                return response()->json($client);
+                $data = array(
+                
+                    // 'counties' => $counties,
+                     //'subcounties' => $subcounties,
+                     'result' => $client,
+                );
+                return response()->json($data);
             }
-            return response()->json(['messages' => ['Error in saving']], 404);
+
+            return response("Error in saving");
+        
  
         // Save to DB ...
     }
@@ -145,14 +153,22 @@ class VoiceLogController extends Controller
         $user = User::where('email', $request->email)->first();
         if(!empty($user)){
             if (Auth::attempt(array('email' => $request->email, 'password' => $request->password))) {
-
-                return response()->json($user);
+               
+                $data = array(
+                
+                   // 'counties' => $counties,
+                    //'subcounties' => $subcounties,
+                    'result' => $user,
+        
+                );
+                return response()->json($data);
                 
             } else {
-                return response(["messages" => ["Invalid login credentials", "Wrong email and password combination"]], 403);
+                return response("Invalid login credentials");
             }
         }else{
-            return response(["messages" => ["Email does not exist in the system"]], 404);
+            return response("Email does not exist in the system");
+           
         }
     }
 
@@ -163,7 +179,15 @@ class VoiceLogController extends Controller
         
         $clients = Client::where('user_id', $user_id)->get();
 
-            return response()->json($clients);
+        $data = array(
+                
+            // 'counties' => $counties,
+             //'subcounties' => $subcounties,
+             'result' => $clients,
+ 
+         );
+         return response()->json($data);
+
         
 
     // Save to DB ...
@@ -174,7 +198,7 @@ class VoiceLogController extends Controller
 			//$date = date('Y-m-d H:i:s', time());
 			$id_number=$request->input('id_number');
             $phone_number =$request->input('phone_number');
-            $date_recruitment=$request->input('recruitment_date');
+            //$date_recruitment=$request->input('recruitment_date');
 			$user_id =$request->input('user_id');
 			//if message_type is 1 = sms,2=voice
 			$message_type=$request->input('message_type');
@@ -184,7 +208,7 @@ class VoiceLogController extends Controller
 						
 					$client = new Client;
 					$client->phone_number =  (int)$phone_number;
-                    $client->date_recruitment = date("Y-m-d H:i:s");
+                    //$client->date_recruitment = date("Y-m-d H:i:s");
                     $client->id_number = (int)$id_number;
 					$client->user_id  =3;
                     $client->message_type = (int)$message_type;
@@ -239,12 +263,17 @@ class VoiceLogController extends Controller
                             $subsquent_message->created_at =  date("Y-m-d H:i:s");
                             if($subsquent_message->save()){
                                //echo response()->json($subsquent_message);
-
+                              
                                 //echo "success";
                              }
                         }
+                        
 
                     }
+                    return response("Saved Succesfuly");
+
+            }else{
+                return response("Error in saving");
 
             }
 		}
