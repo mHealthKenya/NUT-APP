@@ -221,7 +221,7 @@ class VoiceLogController extends Controller
 					if($client->save()){
                         //step 3 send welcome messsage
                         	
-						$msg = "Welcome to Nut App";                 
+						$msg = "Habari Mzazi, Shukrani kwa kujisajili katika Nutrition App.";                 
                         $this->send($phone_number,$msg);
 						//$sender = new SenderController;
                         //$sender->send($to, $msg);
