@@ -106,7 +106,7 @@ class VoiceLogController extends Controller
         $response  = '<?xml version="1.0" encoding="UTF-8"?>';
         $response .= '<Response>';
         $response .= '<Say>Please listen to our awesome record</Say>';
-        $response .= '<Play url= "http://localhost:4500/diamond.mp3"/>';
+        $response .= '<Play url= "http://41.215.81.58:4500/diamond.mp3"/>';
         $response .= '</Response>';
         // Print the response onto the page so that our gateway can read it
         header('Content-type: apllication/xml');
