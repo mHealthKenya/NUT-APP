@@ -99,8 +99,6 @@ class VoiceLogController extends Controller
         $audio = 'diamond.mp3';
         
         $fileUrl2 = File::get($path);
-        echo $fileUrl2;
-        exit;
       
         
         // return $response;
