@@ -96,9 +96,9 @@ class VoiceLogController extends Controller
        // $fileUrl2 = "http://www.amazon.co.us/myfile.mp3";
         //$saveDigitsCallback = "http://193.165.32.14:8080/api/digits";
         $path = public_path();
-        $audio = 'helo.mp3';
+        $audio = 'diamond.mp3';
         
-        //$fileUrl2 = File::get($path.'/assets/'.$audio);
+        $fileUrl2 = File::get($path.'/'.$audio);
       
         
         // return $response;
@@ -106,7 +106,7 @@ class VoiceLogController extends Controller
         $response  = '<?xml version="1.0" encoding="UTF-8"?>';
         $response .= '<Response>';
         $response .= '<Say>Please listen to our awesome record</Say>';
-        // $response .= '<Play url= $fileUrl2/>';
+        $response .= '<Play url= $fileUrl2/>';
         $response .= '</Response>';
         // Print the response onto the page so that our gateway can read it
         header('Content-type: apllication/xml');
