@@ -10,7 +10,7 @@ use App\EducationalMsg;
 use App\OutgoingMsg;
 use Redirect;
 use App\User;
-use File;
+use App\IncomingMsg;
 use Illuminate\Support\Facades\Auth;
 
 class VoiceLogController extends Controller
@@ -57,7 +57,7 @@ class VoiceLogController extends Controller
         $from     = "+254711082608";
 
         //set number you want to call, comma separated list if more than one
-        $to = "+254705255873";
+        $to = "+254728802160";
 
         try {
         //    Make the call
@@ -92,7 +92,23 @@ class VoiceLogController extends Controller
         
     //    $uphoto = File::get($path.'/assets/'.$audio));
     // }
+
     public function voice_receiver(){
+
+    $response  = '<?xml version="1.0" encoding="UTF-8"?>';
+    $response .= '<Response>';
+    $response .= '<Say>My local</Say>';
+    $response .= '<Play url="http://sutholo.com/diamond.mp3"/>';
+    $response .= '</Response>';
+    // Print the response onto the page so that our gateway can read it
+    header('Content-type: apllication/xml');
+    echo $response;
+    
+    }
+
+
+    public function voices_receiver(){
+
         //$fileUrl = "http://www.amazon.co.us/mypromptfile.mp3";
        // $fileUrl2 = "http://www.amazon.co.us/myfile.mp3";
         //$saveDigitsCallback = "http://193.165.32.14:8080/api/digits";
@@ -108,10 +124,8 @@ class VoiceLogController extends Controller
 
         $response  = '<?xml version="1.0" encoding="UTF-8"?>';
         $response .= '<Response>';
-        $response .= 
-        $response .= '<Say>Please listen to our awesome record</Say>';
-        //$response .= '<Play url= $fileUrl2/>';
-        //'<Play url= $path/>';
+        $response .= '<Say>Play my new release</Say>';
+        $response .= '<Play url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"/>';
         $response .= '</Response>';
         // Print the response onto the page so that our gateway can read it
         header('Content-type: apllication/xml');
@@ -283,4 +297,116 @@ class VoiceLogController extends Controller
 
             }
 		}
+
+        public function wellsms(){
+
+        try {
+            $items = OutgoingMsg::where('status', 0)->get();
+            
+             $today = date("d-m-Y");
+
+            foreach ($items as $item) {
+                
+
+                $id = $item->outgoing_message_id;
+                $sendDate = $item->send_date;
+                $message = $item->message;
+                $to=$item->destination;
+
+                // echo "Send data-> ".$sendDate." Leo ".$today."</br>";
+
+                if ($sendDate==$today) {
+                    echo "Phone => ".$to." MSG ".$message."</br>";
+                  
+                  $sender = new SenderController;
+                        $send_msg = $sender->send($to, $message);
+                        
+
+                        if ($send_msg === false) {
+                            //Error has occured....
+                        } else {                            
+                            //Success posting the  message ...
+                            OutgoingMsg::where('outgoing_message_id', $id)
+                                ->update(['status' => "1"]);
+                        } 
+                }
+                
+            }
+        } catch (Exception $e) {
+            echo "Ooops ni kubaya => " . $e;
+        }
+
+    }
+
+     function jibu() {      
+
+
+        try {
+            
+            $items = IncomingMsg::where('status', 0)->get();
+            
+            $today = date("d-m-Y");
+
+            foreach ($items as $item) {
+                
+
+                $inid = $item->id;                
+                $message = $item->response;
+                $dest=$item->source;
+
+                $mobileno = substr($dest, 4);
+
+                $len = strlen($mobileno);
+
+                if ($len < 10) {
+
+                    $to = "0" . $mobileno;
+                } 
+                else {
+                    $to = $dest;
+                }
+                 // echo " Phone ".$to." MSG ".$message. '</br>';
+
+                 $src = OutgoingMsg::where('destination', $to)->first();
+
+                // print_r($src);
+
+                // $outid = $src[id]; 
+                 $msgid = $src['educational_message_id'];
+
+
+
+                if ($message == 1) {
+                   //Update responses accordingly ...
+                   echo "Phone ".$to." MSG IDs ".$msgid.'</br>';
+                            IncomingMsg::where('id', $inid)
+                                ->update(['status' => "1",'seqnc_id' => $msgid]);
+
+                                //Update Response on outgoing table
+                                OutgoingMsg::where('destination', $to)
+                                ->update(['response' => $msgid]);
+
+                }else {
+                    IncomingMsg::where('id', $inid)
+                                ->update(['status' => "1"]);
+                }
+
+                  
+
+            
+
+
+               
+                
+            }
+        } catch (Exception $e) {
+            echo "Ooops ni kubaya => " . $e;
+        }
+
+
+     }
+
+		
+	
+
 }
