@@ -16,3 +16,7 @@ class VoiceLog extends Model
         'phoneNumber', 'status', 'sessionId', 'errorMessage', 'updated_at', 'created_at'
     ];
 }
+
+
+
+
