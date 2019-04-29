@@ -10,6 +10,7 @@ use App\EducationalMsg;
 use App\OutgoingMsg;
 use Redirect;
 use App\User;
+use File;
 use Illuminate\Support\Facades\Auth;
 
 class VoiceLogController extends Controller
@@ -95,7 +96,9 @@ class VoiceLogController extends Controller
         //$fileUrl = "http://www.amazon.co.us/mypromptfile.mp3";
        // $fileUrl2 = "http://www.amazon.co.us/myfile.mp3";
         //$saveDigitsCallback = "http://193.165.32.14:8080/api/digits";
-        $path = 'http://localhost:4500/diamond.mp3';
+        $path = 'http://localhost:8000/diamond.mp3';   
+        //
+        //"{{URL::asset('diamond.mp3')}}"
         $audio = 'diamond.mp3';
         
         $fileUrl2 = File::get($path);
@@ -105,8 +108,10 @@ class VoiceLogController extends Controller
 
         $response  = '<?xml version="1.0" encoding="UTF-8"?>';
         $response .= '<Response>';
+        $response .= 
         $response .= '<Say>Please listen to our awesome record</Say>';
-        $response .= '<Play url= "https://www.youtube.com/watch?v=iIno0Zqhme0&feature=youtu.be"/>';
+        //$response .= '<Play url= $fileUrl2/>';
+        //'<Play url= $path/>';
         $response .= '</Response>';
         // Print the response onto the page so that our gateway can read it
         header('Content-type: apllication/xml');
@@ -278,8 +283,4 @@ class VoiceLogController extends Controller
 
             }
 		}
-
-		
-	
-
 }
