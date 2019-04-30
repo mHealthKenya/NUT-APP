@@ -48,8 +48,8 @@ class VoiceLogController extends Controller {
         // Set your Africa's Talking phone number in international format
         $from = "+254711082608";
         //set number you want to call, comma separated list if more than one
-//        $to = "+254728802160";
-        $to = "+254705255873";
+        $to = "+254728802160";
+//        $to = "+254705255873";
 
         try {
             //    Make the call
@@ -69,7 +69,6 @@ class VoiceLogController extends Controller {
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
-
         if ($send) {
             $voice = new VoiceLog;
             $voice->phoneNumber = $to;
@@ -127,7 +126,7 @@ class VoiceLogController extends Controller {
             $to = '0728802160';
             $msgid = rand(10, 100);
 
-            $text = "Thank you for your response";
+            $text = "Response received, Thank you!";
 
             $response = '<?xml version = "1.0" encoding = "UTF-8" ?>';
             $response .= '<Response>';
@@ -136,15 +135,16 @@ class VoiceLogController extends Controller {
 
             // Print the response onto the page so that our gateway can read it
             header('Content-type: text/plain');
-            // echo $response;
-
-            OutgoingMsg::where('destination', $to)
-                    ->update(['response' => $dgts]);
+            
+            // update response on outgoing table            
+             OutgoingMsg::where('destination', $to)
+                    ->update(['response' => $dgts]);            
 
             return $response;
+            
         } else {
 
-            $text = "Kindly type one";
+            $text = "Kindly enter one";
 
 
             $response = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -168,9 +168,7 @@ class VoiceLogController extends Controller {
         //$fileUrl = "http://www.amazon.co.us/mypromptfile.mp3";
         // $fileUrl2 = "http://www.amazon.co.us/myfile.mp3";
         //$saveDigitsCallback = "http://193.165.32.14:8080/api/digits";
-        $path = 'http://localhost:8000/diamond.mp3';   
-        //
-        //"{{URL::asset('diamond.mp3')}}"
+        $path = 'http://localhost:4500/diamond.mp3';
         $audio = 'diamond.mp3';
 
         $fileUrl2 = File::get($path);
