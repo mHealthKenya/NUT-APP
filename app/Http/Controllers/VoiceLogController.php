@@ -102,7 +102,7 @@ class VoiceLogController extends Controller {
         }
     }
 
-    //Start  voice
+    //Start voice
     public function voice($msg) {
 
         $response = '<?xml version="1.0" encoding="UTF-8"?>';
