@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Auth;
 
 class VoiceLogController extends Controller {
 
-    //
-
     public function send($to, $message) {
         // $to=$request->input('to');
         // $message =$request->input('message');
