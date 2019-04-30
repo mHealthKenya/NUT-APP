@@ -168,7 +168,9 @@ class VoiceLogController extends Controller {
         //$fileUrl = "http://www.amazon.co.us/mypromptfile.mp3";
         // $fileUrl2 = "http://www.amazon.co.us/myfile.mp3";
         //$saveDigitsCallback = "http://193.165.32.14:8080/api/digits";
-        $path = 'http://localhost:4500/diamond.mp3';
+        $path = 'http://localhost:8000/diamond.mp3';   
+        //
+        //"{{URL::asset('diamond.mp3')}}"
         $audio = 'diamond.mp3';
 
         $fileUrl2 = File::get($path);

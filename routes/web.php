@@ -84,14 +84,7 @@ Route::view('others/user-profile', 'others.user-profile')->name('user-profile');
 Route::view('others/starter', 'others.starter')->name('starter');
 
 
-Route::post('
-
-
-
-
-
-
-/{to}', ['uses' => 'VoiceLogController@sendVoice']);
+Route::post('/{to}', ['uses' => 'VoiceLogController@sendVoice']);
 
 // , 'as' => 'completereg']);
 
