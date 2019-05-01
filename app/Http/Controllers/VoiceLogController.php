@@ -48,11 +48,12 @@ class VoiceLogController extends Controller {
         // Set your Africa's Talking phone number in international format
         $from = "+254711082608";
         //set number you want to call, comma separated list if more than one
-        $to = "+254728802160";
+        // $to = "+254728802160";
 //        $to = "+254705255873";
+        $to = "+254735219899";
 
         try {
-            //    Make the call
+            //  Make the call
             $send = $voice->call([
                 'from' => $from,
                 'to' => $to
@@ -69,6 +70,7 @@ class VoiceLogController extends Controller {
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
+
         if ($send) {
             $voice = new VoiceLog;
             $voice->phoneNumber = $to;
@@ -90,10 +92,9 @@ class VoiceLogController extends Controller {
                 $msg = $item->message;
                 $to = $item->destination;
                 // echo "Send data-> ".$sendDate." Leo ".$today."</br>";
-
                 if ($sendDate == $today) {
                     // echo "Phone => ".$to." MSG ".$msg."</br>";
-                    return $this->voice($msg);
+                    return $this->voice($msg, $id);
                 }
             }
         } catch (Exception $e) {
@@ -101,66 +102,102 @@ class VoiceLogController extends Controller {
         }
     }
 
-    //Start voice
-    public function voice($msg) {
+    //Start voice call
+    public function voice($msg, $id) {
 
-        $response = '<?xml version="1.0" encoding="UTF-8"?>';
-        $response .= '<Response>';
-        $response .= '<GetDigits timeout="2" numDigits="10"  callbackUrl="http://41.215.81.58:4500/api/savedigits">';
-        $response .= '<Say>' . $msg . '</Say>';
-        $response .= '</GetDigits>';
-        $response .= '<Say>We did not receive any input. Good bye</Say>';
-        $response .= '</Response>';
+        // This is a unique ID generated for this call
+        $sessionId = $_POST['sessionId'];
 
-        header('Content-type: text/plain');
-        echo $response;
-    }
+        // Check to see whether this call is active
+        $isActive = $_POST['isActive'];        
+        
+        // update response on outgoing table            
+        OutgoingMsg::where('outgoing_message_id', $id)
+                ->update(['sessionId' => $sessionId]);
 
-    //Process responses from voice
-    public function saveDigits() {
-        // Read the dtmf digits
-        $dgts = $_POST['dtmfDigits'];
-
-        if ($dgts == 1) {
-
-            $to = '0728802160';
-            $msgid = rand(10, 100);
-
-            $text = "Response received, Thank you!";
-
-            $response = '<?xml version = "1.0" encoding = "UTF-8" ?>';
-            $response .= '<Response>';
-            $response .= '<Say>' . $text . '</Say>';
-            $response .= '</Response>';
-
-            // Print the response onto the page so that our gateway can read it
-            header('Content-type: text/plain');
-            
-            // update response on outgoing table            
-             OutgoingMsg::where('destination', $to)
-                    ->update(['response' => $dgts]);            
-
-            return $response;
-            
-        } else {
-
-            $text = "Kindly enter one";
-
+        if ($isActive == 1) {
 
             $response = '<?xml version="1.0" encoding="UTF-8"?>';
             $response .= '<Response>';
-            $response .= '<GetDigits timeout="2" numDigits="10"  callbackUrl="http://41.215.81.58:4500/api/savedigits">';
-            $response .= '<Say>' . $text . '</Say>';
+            $response .= '<GetDigits timeout="3" numDigits="10"  callbackUrl="http://41.215.81.58:4500/api/savedigits">';
+            $response .= '<Say>' . $msg . '</Say>';
             $response .= '</GetDigits>';
-            $response .= '<Say>We did not receive any input. Good bye</Say>';
+            $response .= '<Say>We did not receive any input. Good bye!</Say>';
             $response .= '</Response>';
 
-            // Print the response onto the page so that our gateway can read it
             header('Content-type: text/plain');
-            // echo $response;
 
-            return $response;
+            echo $response;
+        } else {
+            // Read in call details (duration, cost). This flag is set once the call is completed.
+            // Note that the gateway does not expect a response in thie case
+
+            $duration = $_POST['durationInSeconds'];
+            $currencyCode = $_POST['currencyCode'];
+            $amount = $_POST['amount'];
+
+            // You can then store this information in the database for your records
         }
+        
+    }
+
+    //Process voice and save responses from client
+    public function saveDigits() {
+        
+        // Read the dtmf digits
+        $dgts = $_POST['dtmfDigits'];
+
+        // This is a unique ID generated for this call
+        $sessId = $_POST['sessionId'];
+        
+        // Check to see whether this call is active
+        $isActive = $_POST['isActive'];   
+
+        $items = OutgoingMsg::where('sessionId', $sessId)->get();
+if ($isActive == 1) {
+        foreach ($items as $item) {
+
+            $sessionId = $item->sessionId;
+
+            if ($dgts == 1) {
+
+                $to = '0728802160';
+                $msgid = rand(10, 100);
+
+                $text = "Response received, Thank you!";
+
+                $response = '<?xml version = "1.0" encoding = "UTF-8" ?>';
+                $response .= '<Response>';
+                $response .= '<Say>' . $text . '</Say>';
+                $response .= '</Response>';
+
+                // Print the response onto the page so that our gateway can read it
+                header('Content-type: text/plain');
+
+                // update response on outgoing table            
+                OutgoingMsg::where('destination', $to)
+                        ->update(['response' => $dgts]);
+
+                return $response;
+            } else {
+
+                $text = "Kindly key in one";
+
+                $response = '<?xml version="1.0" encoding="UTF-8"?>';
+                $response .= '<Response>';
+                $response .= '<GetDigits timeout="2" numDigits="10"  callbackUrl="http://41.215.81.58:4500/api/savedigits">';
+                $response .= '<Say>' . $text . '</Say>';
+                $response .= '</GetDigits>';
+                $response .= '<Say>We did not receive any input. Good bye</Say>';
+                $response .= '</Response>';
+
+                // Print the response onto the page so that our gateway can read it
+                header('Content-type: text/plain');
+                // echo $response;
+
+                return $response;
+            }
+    }}
     }
 
     public function voices_receiver() {
