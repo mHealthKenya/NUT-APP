@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class EducationalVoice extends Model
 {
     //
-    public $table = 'voice_messages';
+    public $table = 'educational_voice_messages';
     public $timestamps = false;
     protected $primaryKey = 'voice_message_id';
 
