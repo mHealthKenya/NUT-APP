@@ -13,7 +13,7 @@ class OutgoingVoice extends Model
 
 
     protected $fillable = [
-    'message', 'destination', 'send_date', 'status', 'client_id', 'educational_message_id', 'sessionId', 'updated_at', 'created_at'
+    'message', 'destination', 'send_date', 'status', 'client_id', 'educational_message_id', 'response', 'sessionId', 'updated_at', 'created_at'
     ];
 
     public function educational_message(){
