@@ -36,44 +36,60 @@ class VoiceLogController extends Controller {
     }
 
     public function sendVoice() {
-        //app credentials
-        $username = "mhealthkenya";
-        $apiKey = "9318d173cb9841f09c73bdd117b3c7ce3e6d1fd559d3ca5f547ff2608b6f3212";
-        //initialize the SDK
-        $AT = new AfricasTalking($username, $apiKey);
+        $items = OutgoingMsg::where('status', 0)->get();
 
-        //get the voice service 
-        $voice = $AT->voice();
+        $today = date("d-m-Y");
 
-        // Set your Africa's Talking phone number in international format
-        $from = "+254711082608";
-        //set number you want to call, comma separated list if more than one
-        // $to = "+254728802160";
+        foreach ($items as $item) {
+
+            $id = $item->outgoing_message_id;
+            $sendDate = $item->send_date;
+            $msg = $item->message;
+            $to = $item->destination;
+            // echo "Send data-> ".$sendDate." Leo ".$today."</br>";
+            if ($sendDate == $today) {
+                // echo "Phone => ".$to." MSG ".$msg."</br>";
+                //app credentials
+                $username = "mhealthkenya";
+                $apiKey = "9318d173cb9841f09c73bdd117b3c7ce3e6d1fd559d3ca5f547ff2608b6f3212";
+                //initialize the SDK
+                $AT = new AfricasTalking($username, $apiKey);
+
+                //get the voice service 
+                $voice = $AT->voice();
+
+                // Set your Africa's Talking phone number in international format
+                $from = "+254711082608";
+                //set number you want to call, comma separated list if more than one
+                // $to = "+254728802160";
 //        $to = "+254705255873";
-        $to = "+254735219899";
+//        $to = "+254728802160";
 
-        try {
-            //  Make the call
-            $send = $voice->call([
-                'from' => $from,
-                'to' => $to
-            ]);
-            // $results = $voice->call($from, $to);
-            print_r($send);
-            //loop through the numbers if more than one
-            // foreach ($results as $result) {
-            //     # code...
-            //     echo $result->status;
-            //     echo $result->phoneNumber;
-            //     echo "<br/>";
-            // } 
-        } catch (Exception $e) {
-            echo "Error: " . $e->getMessage();
-        }
 
-        if ($send) {
-            $voice = new VoiceLog;
-            $voice->phoneNumber = $to;
+                try {
+                    //  Make the call
+                    $send = $voice->call([
+                        'from' => $from,
+                        'to' => $to
+                    ]);
+                    // $results = $voice->call($from, $to);
+                    print_r($send);
+                    //loop through the numbers if more than one
+                    // foreach ($results as $result) {
+                    //     # code...
+                    //     echo $result->status;
+                    //     echo $result->phoneNumber;
+                    //     echo "<br/>";
+                    // } 
+                } catch (Exception $e) {
+                    echo "Error: " . $e->getMessage();
+                }
+
+                if ($send) {
+                    $voice = new VoiceLog;
+                    $voice->phoneNumber = $to;
+                }
+            }
         }
     }
 
@@ -83,18 +99,23 @@ class VoiceLogController extends Controller {
 
             $items = OutgoingMsg::where('status', 0)->get();
 
-            $today = date("d-m-Y");
+            if ($items) {
 
-            foreach ($items as $item) {
+                $today = date("d-m-Y");
 
-                $id = $item->outgoing_message_id;
-                $sendDate = $item->send_date;
-                $msg = $item->message;
-                $to = $item->destination;
-                // echo "Send data-> ".$sendDate." Leo ".$today."</br>";
-                if ($sendDate == $today) {
-                    // echo "Phone => ".$to." MSG ".$msg."</br>";
-                    return $this->voice($msg, $id);
+                foreach ($items as $item) {
+
+                    $id = $item->outgoing_message_id;
+                    $sendDate = $item->send_date;
+                    $msg = $item->message;
+                    $to = $item->destination;
+
+                    // echo "Send data-> ".$sendDate." Leo ".$today."</br>";
+
+                    if ($sendDate == $today) {
+                        // echo "Phone => ".$to." MSG ".$msg."</br>";
+                        return $this->voice($msg, $id, $to);
+                    }
                 }
             }
         } catch (Exception $e) {
@@ -103,31 +124,35 @@ class VoiceLogController extends Controller {
     }
 
     //Start voice call
-    public function voice($msg, $id) {
+    public function voice($msg, $id, $to) {
 
         // This is a unique ID generated for this call
         $sessionId = $_POST['sessionId'];
 
         // Check to see whether this call is active
-        $isActive = $_POST['isActive'];        
-        
+        $isActive = $_POST['isActive'];
+
+        $dest = $_POST['callerNumber']; //This is the client mobile number i.e Check to see whether this is the enqueue or dequeue Africas Talking phone number  
         // update response on outgoing table            
-        OutgoingMsg::where('outgoing_message_id', $id)
+        OutgoingMsg::where('destination', $dest)
                 ->update(['sessionId' => $sessionId]);
 
         if ($isActive == 1) {
 
-            $response = '<?xml version="1.0" encoding="UTF-8"?>';
-            $response .= '<Response>';
-            $response .= '<GetDigits timeout="3" numDigits="10"  callbackUrl="http://41.215.81.58:4500/api/savedigits">';
-            $response .= '<Say>' . $msg . '</Say>';
-            $response .= '</GetDigits>';
-            $response .= '<Say>We did not receive any input. Good bye!</Say>';
-            $response .= '</Response>';
+            if ($dest = $to) {
 
-            header('Content-type: text/plain');
+                $response = '<?xml version="1.0" encoding="UTF-8"?>';
+                $response .= '<Response>';
+                $response .= '<GetDigits timeout="6" numDigits="10"  callbackUrl="http://41.215.81.58:4500/api/savedigits">';
+                $response .= '<Say>' . $msg . '</Say>';
+                $response .= '</GetDigits>';
+                $response .= '<Say>We did not receive any input. Good bye!</Say>';
+                $response .= '</Response>';
 
-            echo $response;
+                header('Content-type: text/plain');
+
+                echo $response;
+            }
         } else {
             // Read in call details (duration, cost). This flag is set once the call is completed.
             // Note that the gateway does not expect a response in thie case
@@ -138,88 +163,65 @@ class VoiceLogController extends Controller {
 
             // You can then store this information in the database for your records
         }
-        
     }
 
     //Process voice and save responses from client
     public function saveDigits() {
-        
         // Read the dtmf digits
         $dgts = $_POST['dtmfDigits'];
 
         // This is a unique ID generated for this call
         $sessId = $_POST['sessionId'];
-        
-        // Check to see whether this call is active
-        $isActive = $_POST['isActive'];   
 
         $items = OutgoingMsg::where('sessionId', $sessId)->get();
-if ($isActive == 1) {
-        foreach ($items as $item) {
 
-            $sessionId = $item->sessionId;
+        if ($items) {
 
-            if ($dgts == 1) {
+            foreach ($items as $item) {
 
-                $to = '0728802160';
-                $msgid = rand(10, 100);
+                $sessionId = $item->sessionId;
+//            $to = $item->destination;  
 
-                $text = "Response received, Thank you!";
+                if ($dgts == 1) {
 
-                $response = '<?xml version = "1.0" encoding = "UTF-8" ?>';
-                $response .= '<Response>';
-                $response .= '<Say>' . $text . '</Say>';
-                $response .= '</Response>';
+                    $to = '0728802160';
+                    $msgid = rand(10, 100);
 
-                // Print the response onto the page so that our gateway can read it
-                header('Content-type: text/plain');
+                    $text = "Response received, Thank you!";
 
-                // update response on outgoing table            
-                OutgoingMsg::where('destination', $to)
-                        ->update(['response' => $dgts]);
+                    $response = '<?xml version = "1.0" encoding = "UTF-8" ?>';
+                    $response .= '<Response>';
+                    $response .= '<Say>' . $text . '</Say>';
+                    $response .= '</Response>';
 
-                return $response;
-            } else {
+                    // Print the response onto the page so that our gateway can read it
+                    header('Content-type: text/plain');
 
-                $text = "Kindly key in one";
+                    // update response on outgoing table            
+                    OutgoingMsg::where('sessionId', $sessionId)
+                            ->update(['response' => $dgts]);
 
-                $response = '<?xml version="1.0" encoding="UTF-8"?>';
-                $response .= '<Response>';
-                $response .= '<GetDigits timeout="2" numDigits="10"  callbackUrl="http://41.215.81.58:4500/api/savedigits">';
-                $response .= '<Say>' . $text . '</Say>';
-                $response .= '</GetDigits>';
-                $response .= '<Say>We did not receive any input. Good bye</Say>';
-                $response .= '</Response>';
+                    return $response;
+                } else {
 
-                // Print the response onto the page so that our gateway can read it
-                header('Content-type: text/plain');
-                // echo $response;
+                    $text = "Invalid, Kindly press one";
 
-                return $response;
+                    $response = '<?xml version="1.0" encoding="UTF-8"?>';
+                    $response .= '<Response>';
+                    $response .= '<GetDigits timeout="6" numDigits="10"  callbackUrl="http://41.215.81.58:4500/api/savedigits">';
+                    $response .= '<Say>' . $text . '</Say>';
+                    $response .= '</GetDigits>';
+                    $response .= '<Say>We did not receive any input. Good bye</Say>';
+                    $response .= '</Response>';
+
+                    // Print the response onto the page so that our gateway can read it
+                    header('Content-type: text/plain');
+                    // echo $response;
+
+                    return $response;
+                }
             }
-    }}
-    }
-
-    public function voices_receiver() {
-
-        //$fileUrl = "http://www.amazon.co.us/mypromptfile.mp3";
-        // $fileUrl2 = "http://www.amazon.co.us/myfile.mp3";
-        //$saveDigitsCallback = "http://193.165.32.14:8080/api/digits";
-        $path = 'http://localhost:4500/diamond.mp3';
-        $audio = 'diamond.mp3';
-
-        $fileUrl2 = File::get($path);
-
-        // return $response;
-
-        $response = '<? xml version = "1.0" encoding = "UTF-8" ?>';
-        $response .= '<Response>';
-        $response .= '<Say>Play my new release</Say>';
-        $response .= '<Play url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"/>';
-        $response .= '</Response>';
-// Print the response onto the page so that our gateway can read it
-        header('Content-type: apllication/xml');
-        echo $response;
+        }
     }
 
     public function update_care_giver(Request $request) {
