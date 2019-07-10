@@ -28,10 +28,11 @@ Route::post('getcaregivers', ['uses' => 'VoiceLogController@get_care_givers']);
 Route::post('login', ['uses' => 'VoiceLogController@login']);
 Route::post('sendvoice', ['uses' => 'VoiceLogController@sendVoice']);
 Route::post('voicereceiver', ['uses' => 'VoiceLogController@voice_receiver']);
-Route::post('wellsms', ['uses' => 'VoiceLogController@wellsms']);
+Route::get('wellsms', ['uses' => 'VoiceLogController@wellsms']);
 Route::post('jibu', ['uses' => 'VoiceLogController@jibu']);
 Route::post('educative', ['uses' => 'VoiceLogController@educative']);
 Route::post('voice', ['uses' => 'VoiceLogController@voice']);
 Route::post('savedigits', ['uses' => 'VoiceLogController@saveDigits']);
 Route::post('test', ['uses' => 'VoiceLogController@test']);
+Route::post('clean', ['uses' => 'VoiceLogController@clean']);
 

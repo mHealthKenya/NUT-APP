@@ -15,7 +15,7 @@ class EducationalVoice extends Model
     protected $fillable = [
     'voice_url', 'sequence', 'updated_at', 'created_at'
     ];
-    public function outgoing_messages(){
-        return $this->hasMany('App\OutgoingMsg', 'voice_message_id', 'educational_message_id');
+    public function outgoing_voice(){
+        return $this->hasMany('App\OutgoingVoice', 'voice_message_id', 'educational_message_id');
     }
 }

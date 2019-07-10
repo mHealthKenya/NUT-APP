@@ -13,11 +13,11 @@ class OutgoingVoice extends Model
 
 
     protected $fillable = [
-    'message', 'destination', 'send_date', 'status', 'client_id', 'educational_message_id', 'response', 'sessionId', 'updated_at', 'created_at'
+    'message', 'destination', 'send_date', 'status', 'client_id', 'voice_message_id', 'response', 'sessionId', 'updated_at', 'created_at'
     ];
 
-    public function educational_message(){
-        return $this->belongsTo('App\EducationalMsg', 'educational_message_id', 'voice_message_id');
+    public function educational_voice(){
+        return $this->belongsTo('App\EducationalVoice', 'educational_message_id', 'voice_message_id');
     }
 
     public function client(){
