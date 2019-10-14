@@ -639,9 +639,10 @@ class VoiceLogController extends Controller {
                     if ($send_msg === false) {
 //Error has occured....
                     } else {
-//Success posting the  message ...
                         OutgoingMsg::where('outgoing_message_id', $id)
                                 ->update(['status' => "1"]);
+                                echo "Success sending SMS...
+";
                     }
                 }
             }
@@ -735,18 +736,7 @@ class VoiceLogController extends Controller {
     }
 
     function test() {
-        $clients = Client::all();
-
-        if ($clients) {
-
-            $today = date("d-m-Y");
-
-            foreach ($clients as $client) {
-
-                $id = $client->client_id;
-                echo 'ID ' . $id . '</br>';
-            }
-        }
+        echo "sasa";
     }
 
     function clean() {
