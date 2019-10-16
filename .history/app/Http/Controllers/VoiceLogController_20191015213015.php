@@ -653,7 +653,6 @@ class VoiceLogController extends Controller {
     }
 
     public function sendunsent() {
-        echo "here it is";
 
         try {
             $items = OutgoingMsg::where('status', 0)->get();
@@ -669,16 +668,18 @@ class VoiceLogController extends Controller {
                 $message = $item->message;
                 $to = '0728790010';
 
-                 //echo "Send data-> ".$sendDate." Leo ".$today."</br>";
+                // echo "Send data-> ".$sendDate." Leo ".$today."</br>";
+
                 if ($sendDate < $today) {
 
                     echo "Phone => " . $to . " MSG " . $message ." ID ".$id. "</br>";
+
                     $sender = new SenderController;
                     $send_msg = $sender->send($to, $message);
 
 
                     if ($send_msg === false) {
-                    echo 'Error has occured....';
+                    //Error has occured....
                     } else {
                         OutgoingMsg::where('outgoing_message_id', $id)
                                 ->update(['status' => "1"]);

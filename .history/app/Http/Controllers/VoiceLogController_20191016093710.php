@@ -673,12 +673,13 @@ class VoiceLogController extends Controller {
                 if ($sendDate < $today) {
 
                     echo "Phone => " . $to . " MSG " . $message ." ID ".$id. "</br>";
+exit;
                     $sender = new SenderController;
                     $send_msg = $sender->send($to, $message);
 
 
                     if ($send_msg === false) {
-                    echo 'Error has occured....';
+                    //Error has occured....
                     } else {
                         OutgoingMsg::where('outgoing_message_id', $id)
                                 ->update(['status' => "1"]);

@@ -610,7 +610,6 @@ class VoiceLogController extends Controller {
         }
     }
 
-
     public function wellsms() {
 
         try {
@@ -627,7 +626,7 @@ class VoiceLogController extends Controller {
                 $message = $item->message;
                 $to = $item->destination;
 
-                // echo "Send data-> ".$sendDate." Leo ".$today."</br>";
+// echo "Send data-> ".$sendDate." Leo ".$today."</br>";
 
                 if ($sendDate == $today) {
 
@@ -638,52 +637,12 @@ class VoiceLogController extends Controller {
 
 
                     if ($send_msg === false) {
-                    //Error has occured....
+//Error has occured....
                     } else {
                         OutgoingMsg::where('outgoing_message_id', $id)
                                 ->update(['status' => "1"]);
                                 echo "Success sending SMS...
-                                                            ";
-                    }
-                }
-            }
-        } catch (Exception $e) {
-            echo "Ooops ni kubaya => " . $e;
-        }
-    }
-
-    public function sendunsent() {
-        echo "here it is";
-
-        try {
-            $items = OutgoingMsg::where('status', 0)->get();
-
-            $today = strtotime(date("d-m-Y"));
-
-            foreach ($items as $item) {
-
-
-                $id = $item->outgoing_message_id;
-                $sendDate = strtotime($item->send_date);
-                $sendDatestr = ($item->send_date);
-                $message = $item->message;
-                $to = '0728790010';
-
-                 //echo "Send data-> ".$sendDate." Leo ".$today."</br>";
-                if ($sendDate < $today) {
-
-                    echo "Phone => " . $to . " MSG " . $message ." ID ".$id. "</br>";
-                    $sender = new SenderController;
-                    $send_msg = $sender->send($to, $message);
-
-
-                    if ($send_msg === false) {
-                    echo 'Error has occured....';
-                    } else {
-                        OutgoingMsg::where('outgoing_message_id', $id)
-                                ->update(['status' => "1"]);
-                                echo "Success sending SMS...
-                                                            ";
+";
                     }
                 }
             }
