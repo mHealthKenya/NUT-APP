@@ -14,10 +14,13 @@ use App\IncomingMsg;
 use Illuminate\Support\Facades\Auth;
 use App\EducationalVoice;
 use App\OutgoingVoice;
+use Carbon\Carbon;
 
-class VoiceLogController extends Controller {
+class VoiceLogController extends Controller
+{
 
-    public function send($to, $message) {
+    public function send($to, $message)
+    {
         // $to=$request->input('to');
         // $message =$request->input('message');
 
@@ -37,7 +40,8 @@ class VoiceLogController extends Controller {
         return $send['status'];
     }
 
-    public function sendVoice() {
+    public function sendVoice()
+    {
 
         $items = OutgoingVoice::where('status', 0)->get();
 
@@ -76,8 +80,8 @@ class VoiceLogController extends Controller {
                 $from = "+254711082608";
                 //set number you want to call, comma separated list if more than one
                 // $to = "+254728802160";
-//        $to = "+254705255873";
-//        $to = "+254728802160";
+                //        $to = "+254705255873";
+                //        $to = "+254728802160";
 
 
                 try {
@@ -87,7 +91,7 @@ class VoiceLogController extends Controller {
                         'to' => $to
                     ]);
                     // $results = $voice->call($from, $to);
-//                    print_r($send);
+                    //                    print_r($send);
                     //loop through the numbers if more than one
                     // foreach ($results as $result) {
                     //     # code...
@@ -107,8 +111,9 @@ class VoiceLogController extends Controller {
         }
     }
 
-//Callback url- Play the audio file 
-    public function voice_receiver() {
+    //Callback url- Play the audio file 
+    public function voice_receiver()
+    {
 
         try {
             // This is a unique ID generated for this call
@@ -124,7 +129,7 @@ class VoiceLogController extends Controller {
             switch ($isActive) {
                 case 1:
                     switch ($direction) {
-                        //Calls made by App/System
+                            //Calls made by App/System
                         case "Outbound":
 
                             $items = OutgoingVoice::where('status', 0)->get();
@@ -154,13 +159,13 @@ class VoiceLogController extends Controller {
 
                                     if ($sendDate == $today) {
                                         // echo "Phone => ".$to." MSG ".$msg."</br>";
-//                        return $this->voice($msg, $id, $to);
+                                        //                        return $this->voice($msg, $id, $to);
                                         if ($dest == $to) {
 
                                             // update response on outgoing table            
 
                                             OutgoingVoice::where('outgoing_message_id', $id)
-                                                    ->update(['sessionId' => $sessionId]);
+                                                ->update(['sessionId' => $sessionId]);
 
                                             $response = '<?xml version="1.0" encoding="UTF-8"?>';
                                             $response .= '<Response>';
@@ -179,7 +184,7 @@ class VoiceLogController extends Controller {
                             }
 
                             break;
-                        //Calls made by client
+                            //Calls made by client
                         case "Inbound":
                             $mobileno = substr($dest, 4);
 
@@ -193,9 +198,9 @@ class VoiceLogController extends Controller {
 
                             // update response on outgoing table            
                             OutgoingVoice::where('destination', $to)
-                                    ->update(['sessionId' => $sessionId]);
+                                ->update(['sessionId' => $sessionId]);
 
-//                            $msg = "Press 1 to replay todays message, 2 to replay previous messsages";
+                            //                            $msg = "Press 1 to replay todays message, 2 to replay previous messsages";
                             $msg = 'https://sutholo.com/mp3/thy.mp3';
                             $text = "Received thank you";
 
@@ -229,7 +234,7 @@ class VoiceLogController extends Controller {
                     //  storing this information in the database for records
 
                     OutgoingVoice::where('outgoing_message_id', $id)
-                            ->update(['sessionId' => $sessionId], ['durationInSeconds' => $duration], ['currencyCode' => $code], ['amount' => $amount]);
+                        ->update(['sessionId' => $sessionId], ['durationInSeconds' => $duration], ['currencyCode' => $code], ['amount' => $amount]);
                     break;
             }
         } catch (Exception $e) {
@@ -238,7 +243,8 @@ class VoiceLogController extends Controller {
     }
 
     //Process and save voice responses from client
-    public function saveDigits() {
+    public function saveDigits()
+    {
 
         // Read the dtmf digits
         $dgts = $_POST['dtmfDigits'];
@@ -269,10 +275,10 @@ class VoiceLogController extends Controller {
             foreach ($items as $item) {
 
                 $sessionId = $item->sessionId;
-//            $to = $item->destination;           
+
 
                 switch ($direction) {
-                    // Calls made by App/System
+                        // Calls made by App/System
                     case "Outbound":
 
                         switch ($dgts) {
@@ -290,7 +296,7 @@ class VoiceLogController extends Controller {
 
                                 // update response on outgoing table            
                                 OutgoingVoice::where('sessionId', $sessionId)
-                                        ->update(['response' => $dgts, 'status' => 1]);
+                                    ->update(['response' => $dgts, 'status' => 1]);
 
                                 return $response;
 
@@ -320,13 +326,13 @@ class VoiceLogController extends Controller {
 
                         break;
 
-                    // Calls made by client
+                        // Calls made by client
                     case "Inbound":
 
                         switch ($dgts) {
                             case '1':
 
-//                                $text = "Response received, Thank you!";
+
                                 $text = 'http://sutholo.com/mp3/1.mp3';
 
                                 $response = '<?xml version="1.0" encoding="UTF-8"?>';
@@ -342,7 +348,7 @@ class VoiceLogController extends Controller {
 
                                 // update response on outgoing table            
                                 OutgoingVoice::where('sessionId', $sessionId)
-                                        ->update(['response' => $dgts, 'status' => 1]);
+                                    ->update(['response' => $dgts, 'status' => 1]);
 
                                 return $response;
 
@@ -353,7 +359,7 @@ class VoiceLogController extends Controller {
                                 $items = OutgoingVoice::where('destination', $to)->get();
 
                                 if ($items) {
-//                                    $today = date("d-m-Y");
+
 
                                     foreach ($items as $item) {
 
@@ -384,13 +390,13 @@ class VoiceLogController extends Controller {
 
                                             // update response on outgoing table            
                                             OutgoingVoice::where('outgoing_message_id', $id)
-                                                    ->update(['response' => $dgts, 'status' => 1]);
+                                                ->update(['response' => $dgts, 'status' => 1]);
 
                                             return ($response);
 
-//                                            echo 'Phone ' . $orig . ' MSGs ' . $msg . ' Send date ' . $sendDate . ' Session ' . $id . '</br>';
+                                            //                                            echo 'Phone ' . $orig . ' MSGs ' . $msg . ' Send date ' . $sendDate . ' Session ' . $id . '</br>';
                                         }
-//                                        
+                                        //                                        
                                     }
                                 }
 
@@ -425,46 +431,48 @@ class VoiceLogController extends Controller {
         }
     }
 
-    public function update_care_giver(Request $request) {
+    public function update_care_giver(Request $request)
+    {
         $client_id = $request->input('id');
         $phone_number = $request->input('phone_number');
-//$date_recruitment=$request->date("Y-m-d H:i:s");
+        //$date_recruitment=$request->date("Y-m-d H:i:s");
         $id_number = $request->input('id_number');
-//if message_type is 1 = sms,2=voice
+        //if message_type is 1 = sms,2=voice
         $message_type = $request->input('message_type');
 
 
 
         $client = Client::find($client_id);
         $client->phone_number = (int) $phone_number;
-//  $client->date_recruitment = $date_recruitment;
+        //  $client->date_recruitment = $date_recruitment;
         $client->message_type = (int) $message_type;
         $client->id_number = (int) $id_number;
         $client->updated_at = date("Y-m-d H:i:s");
         if ($client->save()) {
-// $data = array(
-//     // 'counties' => $counties,
-//      //'subcounties' => $subcounties,
-//      'result' => $client,
-// );
+            // $data = array(
+            //     // 'counties' => $counties,
+            //      //'subcounties' => $subcounties,
+            //      'result' => $client,
+            // );
             return response("Updated succesfuly");
         }
 
         return response("Error in saving");
 
 
-// Save to DB ...
+        // Save to DB ...
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $user = User::where('email', $request->email)->first();
         if (!empty($user)) {
             if (Auth::attempt(array('email' => $request->email, 'password' => $request->password))) {
                 $user_array = array($user);
 
                 $data = array(
-// 'counties' => $counties,
-//'subcounties' => $subcounties,
+                    // 'counties' => $counties,
+                    //'subcounties' => $subcounties,
                     'result' => $user_array,
                 );
                 return response()->json($data);
@@ -476,7 +484,8 @@ class VoiceLogController extends Controller {
         }
     }
 
-    public function get_care_givers(Request $request) {
+    public function get_care_givers(Request $request)
+    {
 
         $user_id = $request->input('user_id');
 
@@ -484,32 +493,26 @@ class VoiceLogController extends Controller {
         $clients = Client::where('user_id', $user_id)->get();
 
         $data = array(
-// 'counties' => $counties,
-//'subcounties' => $subcounties,
+            // 'counties' => $counties,
+            //'subcounties' => $subcounties,
             'result' => $clients,
         );
         return response()->json($data);
 
 
 
-// Save to DB ...
+        // Save to DB ...
     }
 
-    public function add_care_giver(Request $request) {
-//$date = date('Y-m-d H:i:s', time());
+    public function add_care_giver(Request $request)
+    {
+
         $id_number = $request->input('id_number');
         $phone_number = $request->input('phone_number');
-//$date_recruitment=$request->input('recruitment_date');
         $user_id = $request->input('user_id');
-//if message_type is 1 = sms,2=voice
         $message_type = $request->input('message_type');
-
-
-//step 2 save new client_details
-
         $client = new Client;
         $client->phone_number = (int) $phone_number;
-//$client->date_recruitment = date("Y-m-d H:i:s");
         $client->id_number = (int) $id_number;
         $client->user_id = $user_id;
         $client->message_type = (int) $message_type;
@@ -519,14 +522,17 @@ class VoiceLogController extends Controller {
 
 
         if ($client->save()) {
-//step 3 send welcome messsage
             $msg = "Habari Mzazi, Shukrani kwa kujisajili katika Nutrition App.";
             $this->send($phone_number, $msg);
 
             if ($message_type == 1) {
-                $date_today = date("d-m-Y");
+                $date_today = Carbon::today();
+                //date faker
+                // $date_today = Carbon::create(2020, 4, 01);
+                // Carbon::setTestNow($date_today);
                 $fourth_message = EducationalMsg::where('sequence', 0)->first();
-                $fourth_message_date = date('d-m-Y', strtotime($date_today . ' + 4 days'));
+                $fourth_message_date = $date_today->addDays(4);
+
 
 
                 $message = new OutgoingMsg;
@@ -547,8 +553,7 @@ class VoiceLogController extends Controller {
                     for ($i = 1; $i < 12; $i++) {
 
                         $message_content = EducationalMsg::where('sequence', $i)->first();
-                        $message_date = date('d-m-Y', strtotime($fourth_message_date . ' + ' . $i . 'week'));
-
+                        $message_date = Carbon::parse($fourth_message_date)->addWeeks($i);
                         $subsquent_message = new OutgoingMsg;
                         $subsquent_message->message = $message_content->message;
                         $subsquent_message->destination = $phone_number;
@@ -559,16 +564,15 @@ class VoiceLogController extends Controller {
                         $subsquent_message->updated_at = date("Y-m-d H:i:s");
                         $subsquent_message->created_at = date("Y-m-d H:i:s");
                         if ($subsquent_message->save()) {
-//echo response()->json($subsquent_message);
-//echo "success";
+                            echo 'saved';
                         }
                     }
                 }
                 return response("Saved Succesfuly");
             } else {
-                $date_today = date("d-m-Y");
+                $date_today = Carbon::today();
                 $fourth_message = EducationalVoice::where('sequence', 0)->first();
-                $fourth_message_date = date('d-m-Y', strtotime($date_today . ' + 4 days'));
+                $fourth_message_date = $fourth_message_date = $date_today->addDays(4);
 
 
                 $message = new OutgoingVoice;
@@ -586,7 +590,7 @@ class VoiceLogController extends Controller {
                     for ($i = 1; $i < 12; $i++) {
 
                         $message_content = EducationalVoice::where('sequence', $i)->first();
-                        $message_date = date('d-m-Y', strtotime($fourth_message_date . ' + ' . $i . 'week'));
+                        $message_date = Carbon::parse($fourth_message_date)->addWeeks($i);
 
                         $subsquent_message = new OutgoingVoice;
                         $subsquent_message->message = $message_content->voice_url;
@@ -598,8 +602,6 @@ class VoiceLogController extends Controller {
                         $subsquent_message->updated_at = date("Y-m-d H:i:s");
                         $subsquent_message->created_at = date("Y-m-d H:i:s");
                         if ($subsquent_message->save()) {
-//echo response()->json($subsquent_message);
-//echo "success";
                         }
                     }
                 }
@@ -611,39 +613,30 @@ class VoiceLogController extends Controller {
     }
 
 
-    public function wellsms() {
+    public function wellsms()
+    {
 
         try {
             $items = OutgoingMsg::where('status', 0)->get();
-
-            $today = strtotime(date("d-m-Y"));
+            $today = Carbon::today();
 
             foreach ($items as $item) {
 
 
                 $id = $item->outgoing_message_id;
-                $sendDate = strtotime($item->send_date);
-                $sendDatestr = ($item->send_date);
+                $sendDate = $item->send_date;
                 $message = $item->message;
                 $to = $item->destination;
 
-                // echo "Send data-> ".$sendDate." Leo ".$today."</br>";
-
                 if ($sendDate == $today) {
-
-                    echo "Phone => " . $to . " MSG " . $message ." ID ".$id. "</br>";
-
                     $sender = new SenderController;
                     $send_msg = $sender->send($to, $message);
-
-
                     if ($send_msg === false) {
-                    //Error has occured....
+                        //Error has occured....
                     } else {
                         OutgoingMsg::where('outgoing_message_id', $id)
-                                ->update(['status' => "1"]);
-                                echo "Success sending SMS...
-                                                            ";
+                            ->update(['status' => "1"]);
+                        echo "Success sending SMS...";
                     }
                 }
             }
@@ -652,38 +645,35 @@ class VoiceLogController extends Controller {
         }
     }
 
-    public function sendunsent() {
+    public function sendunsent()
+    {
         echo "here it is";
 
         try {
             $items = OutgoingMsg::where('status', 0)->get();
 
-            $today = strtotime(date("d-m-Y"));
+            $today = Carbon::today();
 
             foreach ($items as $item) {
 
 
                 $id = $item->outgoing_message_id;
-                $sendDate = strtotime($item->send_date);
-                $sendDatestr = ($item->send_date);
+                $sendDate = $item->send_date;
                 $message = $item->message;
                 $to = $item->destination;
-
-                 //echo "Send data-> ".$sendDate." Leo ".$today."</br>";
                 if ($sendDate < $today) {
 
-                    echo "Phone => " . $to . " MSG " . $message ." ID ".$id. "</br>";
+                    echo "Phone => " . $to . " MSG " . $message . " ID " . $id . "</br>";
                     $sender = new SenderController;
                     $send_msg = $sender->send($to, $message);
 
 
                     if ($send_msg === false) {
-                    echo 'Error has occured....';
+                        echo 'Error has occured....';
                     } else {
                         OutgoingMsg::where('outgoing_message_id', $id)
-                                ->update(['status' => "1"]);
-                                echo "Success sending SMS...
-                                                            ";
+                            ->update(['status' => "1"]);
+                        echo "Success sending SMS...";
                     }
                 }
             }
@@ -692,8 +682,8 @@ class VoiceLogController extends Controller {
         }
     }
 
-//Test messages.
-    function educative() {
+    function educative()
+    {
 
         $fourth_message_date = '2019-04-23';
 
@@ -711,17 +701,16 @@ class VoiceLogController extends Controller {
             $subsquent_message->educational_message_id = $message_content->educational_message_id;
             $subsquent_message->updated_at = date("Y-m-d H:i:s");
             $subsquent_message->created_at = date("Y-m-d H:i:s");
-// print_r($subsquent_message);
+
 
             if ($subsquent_message->save()) {
                 echo response()->json($subsquent_message);
-
-//echo "success";
             }
         }
     }
 
-    function jibu() {
+    function jibu()
+    {
 
 
         try {
@@ -747,28 +736,21 @@ class VoiceLogController extends Controller {
                 } else {
                     $to = $dest;
                 }
-// echo " Phone ".$to." MSG ".$message. '</br>';
 
                 $src = OutgoingMsg::where('destination', $to)->first();
-
-// print_r($src);
-// $outid = $src[id]; 
                 $msgid = $src['educational_message_id'];
 
 
 
                 if ($message == 1) {
-//Update responses accordingly ...
                     echo "Phone " . $to . " MSG IDs " . $msgid . '</br>';
                     IncomingMsg::where('id', $inid)
-                            ->update(['status' => "1", 'seqnc_id' => $msgid]);
-
-//Update Response on outgoing table
+                        ->update(['status' => "1", 'seqnc_id' => $msgid]);
                     OutgoingMsg::where('destination', $to)
-                            ->update(['response' => $msgid]);
+                        ->update(['response' => $msgid]);
                 } else {
                     IncomingMsg::where('id', $inid)
-                            ->update(['status' => "1"]);
+                        ->update(['status' => "1"]);
                 }
             }
         } catch (Exception $e) {
@@ -776,12 +758,8 @@ class VoiceLogController extends Controller {
         }
     }
 
-    function test() {
-        echo "sasa";
-    }
-
-    function clean() {
-//        return $this->test();
+    function clean()
+    {
 
         $dest = '+254735219899';
 
@@ -803,7 +781,7 @@ class VoiceLogController extends Controller {
 
         if ($items) {
 
-//                                    
+            //                                    
 
             foreach ($items as $item) {
 
@@ -823,5 +801,4 @@ class VoiceLogController extends Controller {
             }
         }
     }
-
 }
