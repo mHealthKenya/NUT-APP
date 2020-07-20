@@ -618,13 +618,13 @@ class VoiceLogController extends Controller
 
         try {
             $items = OutgoingMsg::where('status', 0)->get();
-            $today = Carbon::today();
+            $today = Carbon::today()->toDateString();
 
             foreach ($items as $item) {
 
 
                 $id = $item->outgoing_message_id;
-                $sendDate = $item->send_date;
+                $sendDate = date('Y-m-d', strtotime($item->send_date));
                 $message = $item->message;
                 $to = $item->destination;
 
@@ -652,13 +652,13 @@ class VoiceLogController extends Controller
         try {
             $items = OutgoingMsg::where('status', 0)->get();
 
-            $today = Carbon::today();
+            $today = Carbon::today()->toDateString();
 
             foreach ($items as $item) {
 
 
                 $id = $item->outgoing_message_id;
-                $sendDate = $item->send_date;
+                $sendDate = date('Y-m-d', strtotime($item->send_date));
                 $message = $item->message;
                 $to = $item->destination;
                 if ($sendDate < $today) {
