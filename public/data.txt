@@ -1,0 +1,41 @@
+POST /api/login HTTP/1.1
+Accept:          */*
+Accept-Encoding: gzip, deflate, br
+Connection:      keep-alive
+Content-Length:  72
+Content-Type:    application/json
+Host:            197.232.36.170:4500
+Postman-Token:   222e2fac-1b5f-4d6d-b00f-945d6a4467a1
+User-Agent:      PostmanRuntime/7.26.10
+
+{
+    "email": "mhealthsupport@yahoo.com",
+    "password": "LY4DHW"
+}HTTP/1.1 200 OK
+Cache-Control:         no-cache, private
+Content-Type:          application/json
+Date:                  Tue, 06 Apr 2021 17:35:32 GMT
+X-Ratelimit-Limit:     60
+X-Ratelimit-Remaining: 58
+
+{"result":[{"user_id":24,"first_name":"mhealth","last_name":"support","phone_number":"+254705255873","facility_id":4657,"email":"mhealthsupport@yahoo.com","created_at":"2021-04-06 17:31:55","updated_at":"2019-05-03 08:15:46","id_number":29970136}]}POST /api/login HTTP/1.1
+Accept:          */*
+Accept-Encoding: gzip, deflate, br
+Connection:      keep-alive
+Content-Length:  72
+Content-Type:    application/json
+Host:            197.232.36.170:4500
+Postman-Token:   da6964ac-8f97-4a88-bce7-de7704bb62c5
+User-Agent:      PostmanRuntime/7.26.10
+
+{
+    "email": "mhealthsupport@yahoo.com",
+    "password": "LY4DHW"
+}HTTP/1.1 200 OK
+Cache-Control:         no-cache, private
+Content-Type:          application/json
+Date:                  Tue, 06 Apr 2021 17:38:00 GMT
+X-Ratelimit-Limit:     60
+X-Ratelimit-Remaining: 59
+
+{"result":[{"user_id":24,"first_name":"mhealth","last_name":"support","phone_number":"+254705255873","facility_id":4657,"email":"mhealthsupport@yahoo.com","created_at":"2021-04-06 17:31:55","updated_at":"2019-05-03 08:15:46","id_number":29970136}]}

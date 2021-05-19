@@ -19,7 +19,7 @@ class SenderController extends Controller
        // $message =$request->input('message');
 
         $username = "mhealthkenya";
-        $apiKey = "9318d173cb9841f09c73bdd117b3c7ce3e6d1fd559d3ca5f547ff2608b6f3212";
+        $apiKey = "a134a43032612487eb3f4d5fcc4c6c7538d56afdd871dcd284ab171d778c4e51";
         $AT       = new AfricasTalking($username, $apiKey);
 
         // Get one of the services
@@ -43,7 +43,7 @@ class SenderController extends Controller
     public function sendVoice(){
         //app credentials
         $username = "mhealthkenya";
-        $apiKey = "9318d173cb9841f09c73bdd117b3c7ce3e6d1fd559d3ca5f547ff2608b6f3212";
+        $apiKey = "a134a43032612487eb3f4d5fcc4c6c7538d56afdd871dcd284ab171d778c4e51";
         //initialize the SDK
         $AT       = new AfricasTalking($username, $apiKey);
 
