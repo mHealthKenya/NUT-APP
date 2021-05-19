@@ -29,6 +29,7 @@ Route::post('login', ['uses' => 'VoiceLogController@login']);
 Route::post('sendvoice', ['uses' => 'VoiceLogController@sendVoice']);
 Route::post('voicereceiver', ['uses' => 'VoiceLogController@voice_receiver']);
 Route::get('wellsms', ['uses' => 'VoiceLogController@wellsms']);
+Route::get('rewellsms', ['uses' => 'VoiceLogController@rewellsms']);
 Route::get('wellsmses', ['uses' => 'VoiceLogController@sendunsent']);
 Route::post('jibu', ['uses' => 'VoiceLogController@jibu']);
 Route::post('educative', ['uses' => 'VoiceLogController@educative']);
