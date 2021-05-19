@@ -644,6 +644,39 @@ class VoiceLogController extends Controller
             echo "Ooops ni kubaya => " . $e;
         }
     }
+    
+
+    public function rewellsms()
+    {
+
+        try {
+            $items = OutgoingMsg::where('status', 0)->get();
+            $today = Carbon::today()->toDateString();
+
+            foreach ($items as $item) {
+
+
+                $id = $item->outgoing_message_id;
+                $sendDate = date('Y-m-d', strtotime($item->send_date));
+                $message = $item->message;
+                $to = $item->destination;
+
+                if ($sendDate < $today) {
+                    $sender = new SenderController;
+                    $send_msg = $sender->send($to, $message);
+                    if ($send_msg === false) {
+                        //Error has occured....
+                    } else {
+                        OutgoingMsg::where('outgoing_message_id', $id)
+                            ->update(['status' => "1"]);
+                        echo "Success sending SMS...";
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            echo "Ooops ni kubaya => " . $e;
+        }
+    }
 
     public function sendunsent()
     {
